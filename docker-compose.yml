@@ -18,6 +18,7 @@ services:
     image: postgres
     hostname: postgres
     container_name: postgres
+    restart: always
     environment:
       POSTGRES_PASSWORD: 1234
     volumes:
@@ -31,6 +32,7 @@ services:
     image: dockage/phppgadmin
     hostname: phppgadmin
     container_name: phppgadmin
+    restart: always
     environment:
       PHP_PG_ADMIN_SERVER_DESC: postgres
       PHP_PG_ADMIN_SERVER_HOST: postgres
@@ -45,6 +47,7 @@ services:
     image: mysql:5.5
     container_name: mysql
     hostname: mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 1234
     networks:
@@ -58,19 +61,13 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
     hostname: phpmyadmin
+    restart: always
     depends_on:
       - mysql
     environment:
       PMA_HOST: mysql
       PMA_USER: root
       PMA_PASSWORD: 1234
-    networks:
-      - common
-
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
     networks:
       - common
 
