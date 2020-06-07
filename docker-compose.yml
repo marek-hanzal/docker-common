@@ -65,6 +65,7 @@ services:
     depends_on:
       - mysql
     environment:
+#      PMA_ARBITRARY: 1
       PMA_HOST: mysql
       PMA_USER: root
       PMA_PASSWORD: 1234
