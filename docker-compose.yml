@@ -1,81 +1,59 @@
 version: '2.0'
 services:
-  nginx:
-    build:
-      context: nginx
-    hostname: nginx
-    container_name: nginx
-    restart: always
-    depends_on:
-      - phpmyadmin
-      - phppgadmin
-    networks:
-      - common
-    ports:
-      - "80:80"
+    nginx:
+        build:
+            context: nginx
+        hostname: nginx
+        container_name: nginx
+        restart: always
+        networks:
+            - common
+        ports:
+            - "80:80"
 
-  postgres:
-    image: postgres
-    hostname: postgres
-    container_name: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: 1234
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-    networks:
-      - common
+    postgres:
+        image: postgres
+        hostname: postgres
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: 1234
+        volumes:
+            - postgres:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        networks:
+            - common
 
-  phppgadmin:
-    image: dockage/phppgadmin
-    hostname: phppgadmin
-    container_name: phppgadmin
-    restart: always
-    environment:
-      PHP_PG_ADMIN_SERVER_DESC: postgres
-      PHP_PG_ADMIN_SERVER_HOST: postgres
-      PHP_PG_ADMIN_LEFT_WIDTH: 280
-      PHP_PG_ADMIN_THEME: cappuccino
-    depends_on:
-      - postgres
-    networks:
-      - common
+    mysql:
+        image: mysql:5.5
+        container_name: mysql
+        hostname: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+        networks:
+            - common
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql:/var/lib/mysql
 
-  mysql:
-    image: mysql:5.5
-    container_name: mysql
-    hostname: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 1234
-    networks:
-      - common
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql:/var/lib/mysql
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    hostname: phpmyadmin
-    restart: always
-    depends_on:
-      - mysql
-    environment:
-#      PMA_ARBITRARY: 1
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: 1234
-    networks:
-      - common
+    mailhog:
+        image: mailhog/mailhog
+        container_name: mailhog
+        hostname: mailhog
+        restart: always
+        ports:
+            - "1025:1025"
+            - "8025:8025"
+        networks:
+            - common
 
 volumes:
-  postgres:
-  mysql:
+    postgres:
+    mysql:
 
 networks:
-  common:
-    external: true
+    common:
+        external: true
